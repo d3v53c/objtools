@@ -451,6 +451,13 @@ describe('Base Functions', function() {
 			let result = objtools.merge({}, obj);
 			expect(result.foo).to.equal(obj.foo);
 		});
+		it('should prevent prototype pollution', () => {
+			const obj = {};
+			const data = objtools.merge(obj, JSON.parse('{"__proto__":{"polluted":"Yes! Its Polluted"}}'));
+			expect(data.polluted).to.equal(undefined);
+			expect({}.polluted).to.equal(undefined);
+			expect(data.polluted).to.not.equal('Yes! Its Polluted');
+		});
 	});
 
 	describe('getDuplicates()', function() {
